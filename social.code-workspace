@@ -4,5 +4,7 @@
 			"path": "."
 		}
 	],
-	"settings": {}
+	"settings": {
+		"python.pythonPath": "/home/gateway47/.local/share/virtualenvs/social-k4EPX3W5/bin/python"
+	}
 }

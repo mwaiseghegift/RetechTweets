@@ -21,7 +21,7 @@ def HomepageView(request):
 
 def TweetListView(request, *args, **kwargs):
     qs = Tweet.objects.all()
-    tweet_list = [{"id":i.id, "content":i.content} for i in qs]
+    tweet_list = [{"id":i.id, "content":i.content, "image":i.image} for i in qs]
     
     data = {
         "response":tweet_list
@@ -37,6 +37,7 @@ def TweetDetailView(request, tweet_id, *args, **kwargs):
     try:
         obj = Tweet.objects.get(id=tweet_id)
         data['content'] = obj.content
+        data['image'] = obj.image
     except:
         data['message'] = "Not found"
         status = 404

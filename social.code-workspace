@@ -5,6 +5,6 @@
 		}
 	],
 	"settings": {
-		"python.pythonPath": "/home/gateway47/.local/share/virtualenvs/social-k4EPX3W5/bin/python"
+		"python.pythonPath": "/home/gateway47/django-works/envs/social/bin/python3"
 	}
 }

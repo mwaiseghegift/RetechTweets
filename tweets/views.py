@@ -21,7 +21,7 @@ def HomepageView(request):
 
 def TweetListView(request, *args, **kwargs):
     qs = Tweet.objects.all()
-    tweet_list = [{"id":i.id, "content":i.content, "image":i.image} for i in qs]
+    tweet_list = [i.serialize() for i in qs]
     
     data = {
         "response":tweet_list
@@ -37,7 +37,6 @@ def TweetDetailView(request, tweet_id, *args, **kwargs):
     try:
         obj = Tweet.objects.get(id=tweet_id)
         data['content'] = obj.content
-        data['image'] = obj.image
     except:
         data['message'] = "Not found"
         status = 404
@@ -52,10 +51,14 @@ def TweetCreateView(request, *args, **kwargs):
     if form.is_valid():
         obj = form.save(commit=False)
         obj.save()
+        if request.is_ajax():
+            return JsonResponse(obj.serialize(), status=201)
         if next_url != None and is_safe_url(next_url, ALLOWED_HOSTS):
             return redirect(next_url)
         form = TweetForm()
-
+    if form.errors:
+        if request.is_ajax():
+            return JsonResponse(form.errors, status=400)
     data = {
         'form':form,
     }

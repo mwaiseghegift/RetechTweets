@@ -88,6 +88,9 @@
             }else if(xhr.status === 401){
                alert("You must be looged in");
                window.location.href = "/login"
+            }else if (xhr.status === 403){
+               alert("You must be logged in");
+               window.location.href = "/login"
             }
          }
          xhr.send(tweetFormData)
@@ -129,7 +132,7 @@
       xhr.open(method, url)
       xhr.onload = function() {
          const serverResponse = xhr.response
-         const listedItems = serverResponse.response 
+         const listedItems = serverResponse
          var finalItems = ""
          var i;
          

@@ -85,6 +85,9 @@
 
             }else if (xhr.status === 500){
                alert("Oops! There was a server error, Please try again")
+            }else if(xhr.status === 401){
+               alert("You must be looged in");
+               window.location.href = "/login"
             }
          }
          xhr.send(tweetFormData)

@@ -19,3 +19,6 @@ class Tweet(models.Model):
             "content":self.content,
             "likes":random.randint(0,200)
         }
+        
+    def __str__(self):
+        return self.content

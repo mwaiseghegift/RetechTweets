@@ -5,6 +5,8 @@ from .forms import TweetForm
 from django.utils.http import is_safe_url
 from django.conf import settings
 from .models import Tweet
+from .serializers import TweetSerializer
+
 
 ALLOWED_HOSTS = settings.ALLOWED_HOSTS
 
@@ -46,10 +48,29 @@ def TweetDetailView(request, tweet_id, *args, **kwargs):
     return JsonResponse(data, status=status)
 
 def TweetCreateView(request, *args, **kwargs):
+    
+    #Django Rest Framework CreateView
+    data = request.POST or None
+    serializer = TweetSerializer(data=data)
+    if serializer.is_valid():
+        obj = serializer.save(user=request.user)
+        return JsonResponse(serializer.data, status = 201)
+    return JsonResponse({}, status = 400)
+    
+    
+    #Normal CreateView
+    """
+    user = request.user
+    if not request.user.is_authenticated:
+        user = None
+        if request.is_ajax():
+            return JsonResponse({}, status=401) #not authorized
+        return redirect(settings.LOGIN_URL)
     form = TweetForm(request.POST or None)
     next_url = request.POST.get("next") or None
     if form.is_valid():
         obj = form.save(commit=False)
+        obj.user = user
         obj.save()
         if request.is_ajax():
             return JsonResponse(obj.serialize(), status=201)
@@ -64,3 +85,4 @@ def TweetCreateView(request, *args, **kwargs):
     }
 
     return render(request, 'components/tweetform.html', data)
+    """

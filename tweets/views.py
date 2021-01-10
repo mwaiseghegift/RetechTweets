@@ -115,3 +115,17 @@ def TweetDetailView(request, tweet_id, *args, **kwargs):
     
     return JsonResponse(data, status=status)
 """
+
+@api_view(['DELETE','POST'])
+@permission_classes([IsAuthenticated])
+def TweetDeleteView(request, tweet_id, *args, **kwargs):
+    qs = Tweet.objects.filter(id=tweet_id)
+    if not qs.exists():
+        return Response({}, status=404)
+    qs = qs.filter(user=request.user)
+    if not qs.exists():
+        return Response({'message':'Sorry! You are not allowed to delete this'}, status=401) #forbidden
+    obj = qs.first()
+    obj.delete()
+    serializer = TweetSerializer(obj)
+    return Response({'message':'Tweet Deleted'}, status=200) #ok

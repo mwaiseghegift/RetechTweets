@@ -8,7 +8,10 @@ from .models import Tweet
 
 #rest framework
 from rest_framework.response import Response
-from .serializers import TweetSerializer
+from .serializers import (TweetCreateSerializer, 
+                          TweetSerializer, 
+                          TweetActionSerializer)
+
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 
@@ -29,7 +32,7 @@ def HomepageView(request):
 @permission_classes([IsAuthenticated])
 def TweetCreateView(request, *args, **kwargs):
     #Django Rest Framework CreateView
-    serializer = TweetSerializer(data=request.POST)
+    serializer = TweetCreateSerializer(data=request.POST)
     if serializer.is_valid(raise_exception=True):
         serializer.save(user=request.user)
         return Response(serializer.data, status = 201)
@@ -129,3 +132,38 @@ def TweetDeleteView(request, tweet_id, *args, **kwargs):
     obj.delete()
     serializer = TweetSerializer(obj)
     return Response({'message':'Tweet Deleted'}, status=200) #ok
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def TweetActionView(request, *args, **kwargs):
+    """
+    View for Tweet Actions which are: Like, Unlike, Retweet
+    """
+    serializer = TweetActionSerializer(data=request.data)
+    if serializer.is_valid(raise_exception=True):
+        data = serializer.validated_data
+        tweet_id = data.get("id")
+        action = data.get("action")
+        content = data.get("content")
+    
+        qs = Tweet.objects.filter(id=tweet_id) 
+        if not qs.exists():
+            return Response({}, status=404)
+        obj = qs.first()
+        
+        if action == 'like':
+             obj.likes.add(request.user)
+             serializer = TweetSerializer(obj)
+             return Response(serializer.data, status=200)
+        elif action == 'unlike':
+            obj.likes.remove(request.user)
+            serializer = TweetSerializer(obj)
+            return Response(serializer.data, status=200)
+        elif action == 'retweet':
+            retweeted_tweet = Tweet.objects.create(user=request.user, 
+                                                   parent=obj,
+                                                   content=obj.content)
+            serializer = TweetSerializer(retweeted_tweet)
+            return Response(serializer.data, status=201)
+           
+    return Response({}, status=200)

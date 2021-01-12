@@ -27,7 +27,7 @@ SECRET_KEY = '12%-*wmkm@cvhqa7a5ip3yyvt@=_ix#w-mn^5(jma!27x+egg^'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1']
+ALLOWED_HOSTS = ['127.0.0.1','localhost']
 
 
 # Application definition
@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     
-    
+    'corsheaders',
     'rest_framework',
     'tweets',
 ]
@@ -48,6 +48,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -127,10 +128,12 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'retechsocial/static'),
+    os.path.join(BASE_DIR, 'retech-web/public/static'),
 ]
 
 LOGIN_URL = '/login'
+
+CORS_ORIGIN_ALLOW_ALL = True
 
 DEFAULT_RENDERER_CLASSES = [
         'rest_framework.renderers.JSONRenderer',

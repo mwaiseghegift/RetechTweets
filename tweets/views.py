@@ -130,7 +130,6 @@ def TweetDeleteView(request, tweet_id, *args, **kwargs):
         return Response({'message':'Sorry! You are not allowed to delete this'}, status=401) #forbidden
     obj = qs.first()
     obj.delete()
-    serializer = TweetSerializer(obj)
     return Response({'message':'Tweet Deleted'}, status=200) #ok
 
 @api_view(['POST'])

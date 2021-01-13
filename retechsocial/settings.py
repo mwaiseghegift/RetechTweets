@@ -128,8 +128,10 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'retech-web/public/static'),
+    os.path.join(BASE_DIR, 'retechsocial/static/'),
 ]
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'static-root/')
 
 LOGIN_URL = '/login'
 

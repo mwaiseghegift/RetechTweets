@@ -32,7 +32,7 @@ def HomepageView(request):
 @permission_classes([IsAuthenticated])
 def TweetCreateView(request, *args, **kwargs):
     #Django Rest Framework CreateView
-    serializer = TweetCreateSerializer(data=request.POST)
+    serializer = TweetCreateSerializer(data=request.data)
     if serializer.is_valid(raise_exception=True):
         serializer.save(user=request.user)
         return Response(serializer.data, status = 201)

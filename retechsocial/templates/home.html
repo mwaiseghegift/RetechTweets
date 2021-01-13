@@ -2,7 +2,6 @@
 {% block title %} Home {% endblock title %}
 
 {% block body %}
-   {% include 'components/navbar.html' %}
 
    <div class="container">
       <div class="row">
@@ -11,7 +10,7 @@
          </div>
       </div>
 
-      <div class="row">
+      <!-- <div class="row">
          <div class="col-md-4 mx-auto col-10">
             <form class="form" id="tweet-create-form" action="{% url 'create-tweet' %}" method="post">
                {% csrf_token %}
@@ -21,12 +20,17 @@
                <button type="submit" class="btn btn-primary">Create</button>
             </form>
          </div>
-      </div>
+      </div> -->
   
-
-      <div id="tweets">
-         Lets see
+      <div id="retech-tweets">
+         
       </div>
+
+      <!-- <div id="tweets">
+         Lets see
+      </div> -->
+
+
    </div>
 
 

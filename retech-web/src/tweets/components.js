@@ -1,29 +1,31 @@
 import React, {useEffect, useState} from 'react'
 
-import {loadTweets, createTweet} from '../db_lookup'
+import {
+  retechTweetList, 
+  retechCreateTweet,
+  retechTweetAction,
+  } from './lookup'
 
 
 export function TweetsComponent(props){
 
   const textAreaRef = React.createRef()
   const [newTweets, setNewTweets] = useState([])
+
+  const handleBackendUpdate = (response, status) => {
+    let tempTweets = [...newTweets]
+    if (status === 201){
+      tempTweets.unshift(response)
+      setNewTweets(tempTweets)
+    }else{
+      alert('an error occured')
+    }
+  }
+
   const handleSubmit = (event) => {
     event.preventDefault()
     const newVal = textAreaRef.current.value
-    let tempTweets = [...newTweets]
-
-    createTweet(newVal, (response, status, e) =>{
-      if (status === 201){
-        tempTweets.unshift(response)
-      }else{
-        alert('an error occured')
-      }
-
-    })
-
-
-    setNewTweets(tempTweets)
-    console.log(newVal)
+    retechCreateTweet(newVal, handleBackendUpdate)
     textAreaRef.current.value = ''
   }
 
@@ -57,7 +59,7 @@ export function TweetsComponent(props){
     useEffect (() => {
 
       if (tweetsDidSet === false){
-        const myCallback = (response, status) => {
+        const handleTweetListLookup = (response, status) => {
           if (status === 200){
             setTweetsInit(response)
             setTweetsDidSet(true)
@@ -65,7 +67,7 @@ export function TweetsComponent(props){
             alert("There was an error")
           }
         }
-        loadTweets(myCallback)
+        retechTweetList(handleTweetListLookup)
       }
 
     },[tweetsInit, tweetsDidSet, setTweetsDidSet])
@@ -76,24 +78,23 @@ export function TweetsComponent(props){
 
 export function ActionBtn(props){
     const {tweet, action} = props
-
     const [likes, setLikes] = useState(tweet.likes ? tweet.likes:0)
-    const [userLike, setUserLike] = useState(false)
- 
-    const className = props.className ? props.className :'btn btn-primary btn-sm'
-  
+    //const [userLike, setUserLike] = useState(false)
+    const className = props.className ? props.className :'btn btn-primary btn-sm'  
     const actionDisplay = action.display ? action.display : "Action"
+
+    const handleBackendActionEvent = (response, status) =>{
+      console.log(response, status)
+      if(status === 200){
+        setLikes(response.likes)
+       // setUserLike(true)
+      }
+    }
+
     const handleClick = (event) => {
       event.preventDefault()
-      if (action.type === 'like'){
-        if (userLike === true){
-          setLikes(likes - 1)
-          setUserLike(false)
-        }else{
-          setLikes(likes + 1)
-          setUserLike(true)
-        }
-      }
+      retechTweetAction(tweet.id, action.type, handleBackendActionEvent)
+
     }
     const display = action.type === 'like' ? `${likes} ${actionDisplay}` : actionDisplay
     return <button className = {className} onClick={handleClick}>{display}</button>
@@ -105,7 +106,12 @@ export function Tweet(props) {
     const className = props.className ? props.className : 'col-10 max-auto col-md-6'
   
     return <div className={className}>
-      <p>{tweet.id} - {tweet.content}</p>
+      <div>
+        <p>{tweet.id} - {tweet.content}</p>
+      </div>
+      <div>
+        {tweet.parent &&<Tweet tweet={tweet.parent} />}
+      </div>
       <div className='btn btn-group'>
         <ActionBtn tweet={tweet} action={{type: "like", display: "Likes"}} />
         <ActionBtn tweet={tweet} action={{type: "unlike", display: "Unlike"}} />

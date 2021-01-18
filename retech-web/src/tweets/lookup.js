@@ -13,10 +13,11 @@ export function retechTweetList(username, callback){
     }
 
 export function retechTweetDetail(tweetId, callback){
-    backendLookup('GET',`/tweet/${tweetId}/`, callback)
-}
+        backendLookup('GET',`/tweet/${tweetId}/`, callback)
+    }
 
 export function retechTweetAction(tweetId, action, callback){
     const data = {id:tweetId, action:action}
     backendLookup('POST','/tweet/action/', callback,data)
 }
+

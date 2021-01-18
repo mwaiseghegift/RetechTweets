@@ -23,25 +23,27 @@ export function TweetsComponent(props){
 }
 
 export function TweetDetailComponent(props){
-  const {tweetID} = props
+  const {tweetId} = props
   const [didLookup, setDidLookup] = useState(false)
   const [tweet, setTweet] = useState(null)
-  const handleBackendLookup = (response, status) =>{
-    if (status === 200){
+
+  const handleBackendLookup = (response, status) => {
+    if (status === 200) {
       setTweet(response)
-    }else{
-      alert("An error occured, Please try again")
+    } else {
+      alert("There was an error finding your tweet.")
     }
   }
-  useEffect(() => {
+  useEffect(()=>{
     if (didLookup === false){
-      retechTweetDetail(tweetID, handleBackendLookup)
+
+      retechTweetDetail(tweetId, handleBackendLookup)
       setDidLookup(true)
     }
-  }, [tweetID, didLookup, setDidLookup])
-  return tweet === null ? null : <Tweet tweet={tweet} className={props.className} />
-}
+  }, [tweetId, didLookup, setDidLookup])
 
+  return tweet === null ? null : <Tweet tweet={tweet} className={props.className} />
+ }
   
   
 

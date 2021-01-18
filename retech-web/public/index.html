@@ -31,8 +31,8 @@
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div class="retech-tweet-detail" data-tweet-id="10" data-class-name="col-6 mx-auto"></div>
-    <div class="d-none" id="retech-tweets" data-username="admin" data-can-tweet="false"></div>
+    <div id="tweet-container"></div>
+    <div id="retech-tweets" data-username="admin" data-can-tweet="false"></div>
     <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.
@@ -43,5 +43,20 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
+
+  <script>
+    var path = window.location.pathname
+    var idRegex = /(?<tweet_id>\d+)/
+    var matchURL = path.match(idRegex)
+    
+    if (matchURL){
+      var tweetId = matchURL.groups.tweet_id
+      var retechTweetElement = document.getElementById('retech-tweets')
+      retechTweetElement.className = 'd-none'
+      var tweetElement = " <div class='retech-tweet-detail' data-tweet-id='"+tweetId+"' data-class-name='col-6 mx-auto'></div>"
+      var mainContainer = document.getElementById("tweet-container")
+      mainContainer.innerHTML = tweetElement
+    }
+  </script>
   </body>
 </html>

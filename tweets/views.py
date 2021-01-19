@@ -1,19 +1,10 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse, HttpRequest, Http404
-from .forms import TweetForm
 
 from django.utils.http import is_safe_url
 from django.conf import settings
 from .models import Tweet
 
-#rest framework
-from rest_framework.response import Response
-from .serializers import (TweetCreateSerializer, 
-                          TweetSerializer, 
-                          TweetActionSerializer)
-
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated
 
 ALLOWED_HOSTS = settings.ALLOWED_HOSTS
 

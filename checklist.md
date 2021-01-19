@@ -19,3 +19,5 @@ Follow/Unfollow
 
 
 Notifications/Direct Messaging/Search
+
+auth

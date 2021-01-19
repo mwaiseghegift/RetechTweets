@@ -170,7 +170,6 @@ def TweetActionView(request, *args, **kwargs):
            
     return Response({}, status=200)
 
-def TweetProfileView(request, username, *args, **kwargs):
-    return render(request, 'home.html', context={"profile_username":username})
+
 
 

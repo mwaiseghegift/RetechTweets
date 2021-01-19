@@ -1,20 +1,18 @@
 from django.urls import path
 from .views import (
-    HomepageView, 
-    TweetCreateView, 
-    TweetDetailView, 
-    TweetListView,
-    TweetDeleteView,
-    TweetActionView,
+    home_page_view,
+    tweets_detail_view,
+    tweets_list_view,
+    TweetProfileView,
+    
 )
 
 urlpatterns = [
-    path('', HomepageView, name='homepage'),
-    path('tweets/', TweetListView, name='tweet-list'),
-    path('tweet/action/', TweetActionView, name='tweet-action'),
-    path('create-tweet/', TweetCreateView, name='create-tweet'),
-    path('tweet/<int:tweet_id>/', TweetDetailView, name='tweet-detail'),
-    path('tweet/<int:tweet_id>/delete/', TweetDeleteView, name='tweet-delete'),
+    path('', home_page_view, name='local-home'),
+    path('list/', tweets_list_view, name='local_tweet_list' ),
+    path('/<int:tweet_id>', tweets_detail_view, name='local_tweet_detail'),
+    path('profile/<str:username>/', TweetProfileView, name='profile'),
     
+
     
 ]

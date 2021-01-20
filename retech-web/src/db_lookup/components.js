@@ -38,7 +38,7 @@ export function backendLookup(method, endpoint, callback, data){
     if (xhr.status === 403 ){
       const detail = xhr.response.detail
       if (detail === "Authentication credentials were not provided."){
-        window.location.href = "/login"
+        window.location.href = "/login?showLoginRequired=true"
       }
     }
 

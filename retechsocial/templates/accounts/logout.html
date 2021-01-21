@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+
+{% block body %}
+
+
+
+<div class="col-12 col-md-4 mx-auto">
+    <h1>logout</h1>
+    Are you sure you want to logout
+    <div>
+        <form method="post">
+            {% csrf_token %}
+            <button class="btn btn-success" type="submit">Confirm</button>
+        </form>
+        
+    </div>
+</div>
+    
+{% endblock body %}
+    

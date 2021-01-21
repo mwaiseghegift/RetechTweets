@@ -23,7 +23,9 @@ from django.views.generic import TemplateView
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('tweets.api.urls')),
-
+    path('list/', include('tweets.urls')),
+    path('accounts/', include('accounts.urls', namespace="accounts")),
+    path('profile/', include('profiles.urls', namespace='profiles')),
     path('react/', TemplateView.as_view(template_name='react.html')),
 ]
 

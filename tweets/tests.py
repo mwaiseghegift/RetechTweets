@@ -15,7 +15,7 @@ class TweetTestCase(TestCase):
         Tweet.objects.create(content="this is a test1", user=self.user)
         Tweet.objects.create(content="this is a test2", user=self.user)
         Tweet.objects.create(content="this is a test3", user=self.user)
-        Tweet.objects.create(content="this is a test3", user=self.user2)
+        Tweet.objects.create(content="this is a test4", user=self.user2)
         self.currentCount = Tweet.objects.all().count()
         
     def test_user_created(self):
@@ -41,21 +41,23 @@ class TweetTestCase(TestCase):
         
     def test_tweets_related_name(self):
         user = self.user
-        self.assertEqual(user.tweets.count(), 2)
+        self.assertEqual(user.tweets.count(), 3)
         
     def test_action_like(self):
         client = self.get_client()
         response = client.post("/tweet/action/", 
                                {"id":2, "action":"like"})
         self.assertEqual(response.status_code, 200)
-        response = client.post("/tweet/action/", 
-                               {"id":2, "action":"unlike"})
+        # response = client.post("/tweet/action/", 
+        #                        {"id":1, "action":"unlike"})
         self.assertEqual(response.status_code, 200)
         like_count = response.json().get("likes")
-        self.assertEqual(like_count,0 )
+        self.assertEqual(like_count,1 )
         user = self.user
         my_like_instances_count = user.tweetlike_set.count()
-        self.assertEqual(my_like_instances_count, 0)
+        self.assertEqual(my_like_instances_count, 1)
+        related_likes = user.tweet_user.count()
+        self.assertEqual(my_like_instances_count, related_likes)
         
         
     def test_action_retweet(self):
@@ -87,9 +89,9 @@ class TweetTestCase(TestCase):
         
     def test_delete_view(self):
         client = self.get_client()
-        response = client.delete("/tweet/1/delete/")
+        response = client.delete("/tweets/1/delete/")
         self.assertEqual(response.status_code, 200)
-        response = client.delete("/tweet/1/delete/")
+        response = client.delete("/tweets/1/delete/")
         self.assertEqual(response.status_code, 404)
-        response_incorrect_owner = client.delete("/tweet/4/delete/")
+        response_incorrect_owner = client.delete("/tweets/4/delete/")
         self.assertEqual(response_incorrect_owner.status_code, 401)
